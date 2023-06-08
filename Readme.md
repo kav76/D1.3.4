@@ -23,10 +23,15 @@ terraform apply
 Получаем в качестве вывода внешние и локальные адреса 3-х виртуальных машин:
 
 external_ip_address_vm_1 = "158.160.109.47"
+
 external_ip_address_vm_2 = "158.160.103.171"
+
 external_ip_address_vm_3 = "158.160.97.56"
+
 internal_ip_address_vm_1 = "10.128.0.28"
+
 internal_ip_address_vm_2 = "10.128.0.9"
+
 internal_ip_address_vm_3 = "10.128.0.7"
 
 Скриншот полученной инфраструктуры в файле *screenshots/Yandex_Cloud_VMs.png*
