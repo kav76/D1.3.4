@@ -1,0 +1,13 @@
+---
+- name: Add Node to Docker swarm
+  hosts: worker
+  gather_facts: true
+  become: false
+  vars:
+    manager_ip: "10.128.0.28"
+    join_token: "SWMTKN-1-60hzy4vygrkhwtmk8s1lt5wbac0xed09w41mb5kj5nhcmljwwj-97bk4zz82thtydy3mlzzdxqtp"
+  tasks:
+    - name: Add Node as worker
+      ansible.builtin.shell: "docker swarm join --token {{ join_token }} {{ manager_ip }}:2377"
+      
+

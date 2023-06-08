@@ -1,0 +1,27 @@
+---
+- name: Deploy project
+  hosts: managers
+  gather_facts: true
+  become: false
+  vars:
+    user: "debian"
+  tasks:
+    - name: Clone git repo
+      ansible.builtin.shell: 
+        cmd: "git clone https://github.com/microservices-demo/microservices-demo.git"
+        chdir: "/home/{{ user }}"
+
+    - name: Copy correted docker-compose.yml to Docker swarm manager node
+      ansible.builtin.copy:
+        src: ./docker-compose.yml
+        dest: /home/{{ user }}/microservices-demo/
+        owner: {{ user }}
+        group: docker
+        mode '0644'
+
+    - name: Deploy code
+      ansible.builtin.shell:
+        cmd: "docker stack deploy --compose-file docker-compose.yml shop"
+        chdir: "/home/{{ user }}/microservices-demo/deploy/docker-compose/"
+      
+

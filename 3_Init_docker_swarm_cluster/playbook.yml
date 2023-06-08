@@ -1,0 +1,12 @@
+---
+- name: Initialize Docker Swarm cluster
+  hosts: managers
+  gather_facts: true
+  become: false
+  vars:
+    manager_ip: "10.128.0.28"
+  tasks:
+    - name: Initialize manager
+      ansible.builtin.shell: "docker swarm init --advertise-addr {{ manager_ip }}"
+      
+

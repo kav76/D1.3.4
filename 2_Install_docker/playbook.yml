@@ -1,0 +1,74 @@
+---
+- name: install Docker and Docker-compose
+  hosts: docker
+  gather_facts: true
+  become: true
+  tasks:
+    - name: Update the apt package index
+      apt:
+        name: "*"
+        state: latest
+        update_cache: yes
+        force_apt_get: yes
+      tags:
+        - docker
+        - docker-compose
+
+    - name: Install apt-transport-https
+      ansible.builtin.apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - lsb-release
+          - gnupg
+          - gpg
+        state: latest
+        update_cache: true
+      tags:
+        - docker
+        - docker-compose
+
+    - name: Add signing key
+      ansible.builtin.apt_key:
+        url: "https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg"
+        state: present
+      tags:
+        - docker
+        - docker-compose
+
+    - name: Add repository into sources list
+      ansible.builtin.apt_repository:
+        repo: "deb [arch={{ ansible_architecture }}] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} stable"
+        state: present
+        filename: docker
+      tags:
+        - docker
+        - docker-compose
+
+    - name: Install Docker
+      ansible.builtin.apt:
+        name:
+          - docker
+          - docker.io
+          - docker-registry
+        state: latest
+        update_cache: true
+      tags:
+        - docker
+
+
+
+    - name: Add User to docker group
+      user:
+        name: "{{ ansible_env.SUDO_USER }}"
+        groups: docker
+        append: yes
+
+
+    - name: Install Docker-compose
+      ansible.builtin.apt:
+        name:
+          - docker-compose
+      tags:
+        - docker-compose
+
